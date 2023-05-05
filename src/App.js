@@ -1,24 +1,84 @@
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link,
+  Outlet,
+  useParams,
+  useLocation,
+} from "react-router-dom";
+
+const NavBar = function () {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <h2>React Rotuer v6 Demo</h2>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="press">Press</Link>
+          </li>
+        </ul>
+      </nav>
+    </>
+  );
+}
+
+const Home = function () {
+  return <h1>Home</h1>
+}
+
+const Article = function () {
+  let { article_id } = useParams();
+  return <h3>Article ID: {article_id}</h3>;
+}
+
+const Archive = function () {
+  let { year } = useParams();
+  let location = useLocation();
+  console.log(location)
+  return <h3>Year {year}</h3>;
+}
+
+const Press = function () {
+  return (
+    <>
+      <h1>Press</h1>
+      <div><Link to="1">Why is the sky blue?</Link></div>
+      <div><Link to="2">The science of solar eclipse?</Link></div>
+      <nav>
+        <p>Archive</p>
+        <ul>
+          <li>
+            <Link to="archive/2023">2023</Link>
+          </li>
+          <li>
+            <Link to="archive/2022">2022</Link>
+          </li>
+        </ul>
+      </nav>
+      <Outlet />
+    </>
+  )
+}
+
+const App = function () {
+  return (
+    <BrowserRouter>
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="press" element={<Press />}>
+          <Route path=":article_id" element={<Article />} />
+          <Route path="archive/:year" element={<Archive />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
